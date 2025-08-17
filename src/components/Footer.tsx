@@ -28,6 +28,7 @@ const Footer = () => {
               <li><a href="#" className="hover:text-fresh-green transition-colors">Farmer Resources</a></li>
               <li><a href="#" className="hover:text-fresh-green transition-colors">Pricing Guide</a></li>
               <li><a href="#" className="hover:text-fresh-green transition-colors">Success Stories</a></li>
+               <li><a href="/ftot01.pdf" className="hover:text-fresh-green transition-colors">Vision Plan 2025</a></li>
             </ul>
           </div>
 
