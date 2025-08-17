@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Order Form - Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            padding: 40px;
+            text-align: center;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .form-section {
+            padding: 40px;
+        }
+
+        .form-grid {
+            display: grid;
+            gap: 25px;
+        }
+
+        .form-group {
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 0.95rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #4facfe;
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(79, 172, 254, 0.3);
+        }
+
+        .form-group input:hover,
+        .form-group select:hover {
+            border-color: #4facfe;
+            background: white;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(79, 172, 254, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .response {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 12px;
+            display: none;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .success {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            color: #155724;
+            border-left: 4px solid #28a745;
+        }
+
+        .error {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            color: #721c24;
+            border-left: 4px solid #dc3545;
+        }
+
+        .demo-info {
+            background: #e9ecef;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+
+        .demo-info h3 {
+            color: #495057;
+            margin-bottom: 10px;
+        }
+
+        .demo-info p {
+            color: #6c757d;
+            line-height: 1.6;
+        }
+
+        .orders-section {
+            background: #f8f9fa;
+            padding: 40px;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .orders-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .orders-header h2 {
+            color: #333;
+            font-weight: 600;
+        }
+
+        .refresh-btn {
+            padding: 10px 20px;
+            background: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s ease;
+        }
+
+        .refresh-btn:hover {
+            background: #5a6268;
+        }
+
+        .order-item {
+            background: white;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            border-left: 4px solid #4facfe;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease;
+        }
+
+        .order-item:hover {
+            transform: translateX(5px);
+        }
+
+        .order-header {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .order-details {
+            color: #6c757d;
+            font-size: 0.95rem;
+        }
+
+        .no-orders {
+            text-align: center;
+            color: #6c757d;
+            padding: 40px;
+            font-style: italic;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+
+            .header {
+                padding: 30px 20px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .form-section, .orders-section {
+                padding: 25px;
+            }
+
+            .orders-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Product Order System</h1>
+            <p>Demo Form - Test the order submission functionality</p>
+        </div>
+        
+        <div class="form-section">
+            <div class="demo-info">
+                <h3>🚀 Demo Mode</h3>
+                <p>This is a demonstration page. Form data is stored locally in your browser and will reset when you refresh the page. In a real application, this would connect to a backend server to store orders permanently.</p>
+            </div>
+            
+            <form id="orderForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="name">👤 Customer Name</label>
+                        <input type="text" id="name" name="name" placeholder="Enter customer name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="product">📦 Product</label>
+                        <select id="product" name="product" required>
+                            <option value="">Select a product...</option>
+                            <option value="MacBook Pro">💻 MacBook Pro - $1,299</option>
+                            <option value="iPhone 15">📱 iPhone 15 - $799</option>
+                            <option value="iPad Air">📱 iPad Air - $599</option>
+                            <option value="Apple Watch">⌚ Apple Watch - $399</option>
+                            <option value="AirPods Pro">🎧 AirPods Pro - $249</option>
+                            <option value="Magic Mouse">🖱️ Magic Mouse - $99</option>
+                            <option value="Magic Keyboard">⌨️ Magic Keyboard - $179</option>
+                            <option value="Studio Display">🖥️ Studio Display - $1,599</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="qty">🔢 Quantity</label>
+                        <input type="number" id="qty" name="qty" min="1" max="100" placeholder="Enter quantity" required>
+                    </div>
+                </div>
+                
+                <button type="submit" class="submit-btn">
+                    📋 Submit Order
+                </button>
+            </form>
+            
+            <div id="response" class="response"></div>
+        </div>
+        
+        <div class="orders-section">
+            <div class="orders-header">
+                <h2>📊 Recent Orders</h2>
+                <button onclick="loadOrders()" class="refresh-btn">🔄 Refresh</button>
+            </div>
+            <div id="ordersList"></div>
+        </div>
+    </div>
+
+    <script>
+        // Local storage for demo purposes
+        let orders = JSON.parse(localStorage.getItem('demoOrders')) || [];
+        let nextOrderId = orders.length > 0 ? Math.max(...orders.map(o => o.id)) + 1 : 1;
+
+        document.getElementById('orderForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = new FormData(this);
+            const name = formData.get('name').trim();
+            const product = formData.get('product').trim();
+            const qty = parseInt(formData.get('qty'));
+            
+            const responseDiv = document.getElementById('response');
+            
+            // Validate input
+            if (!name || !product || !qty || qty <= 0) {
+                showResponse('error', 'Please fill in all fields with valid data.');
+                return;
+            }
+            
+            // Create order object
+            const order = {
+                id: nextOrderId++,
+                name: name,
+                product: product,
+                quantity: qty,
+                timestamp: new Date().toLocaleString(),
+                status: 'Pending'
+            };
+            
+            // Add to orders array
+            orders.unshift(order); // Add to beginning
+            
+            // Keep only last 50 orders for demo
+            if (orders.length > 50) {
+                orders = orders.slice(0, 50);
+            }
+            
+            // Save to localStorage
+            localStorage.setItem('demoOrders', JSON.stringify(orders));
+            
+            // Show success message
+            showResponse('success', `
+                <div class="order-header">✅ Order Submitted Successfully!</div>
+                <div class="order-details">
+                    <strong>Order ID:</strong> #${order.id}<br>
+                    <strong>Customer:</strong> ${order.name}<br>
+                    <strong>Product:</strong> ${order.product}<br>
+                    <strong>Quantity:</strong> ${order.quantity}<br>
+                    <strong>Time:</strong> ${order.timestamp}
+                </div>
+            `);
+            
+            // Reset form
+            this.reset();
+            
+            // Refresh orders list
+            loadOrders();
+            
+            // Add some animation
+            setTimeout(() => {
+                const firstOrder = document.querySelector('.order-item');
+                if (firstOrder) {
+                    firstOrder.style.background = 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)';
+                    setTimeout(() => {
+                        firstOrder.style.background = 'white';
+                    }, 2000);
+                }
+            }, 100);
+        });
+
+        function showResponse(type, message) {
+            const responseDiv = document.getElementById('response');
+            responseDiv.className = `response ${type}`;
+            responseDiv.innerHTML = message;
+            responseDiv.style.display = 'block';
+            
+            // Auto-hide success messages after 5 seconds
+            if (type === 'success') {
+                setTimeout(() => {
+                    responseDiv.style.display = 'none';
+                }, 5000);
+            }
+        }
+
+        function loadOrders() {
+            const ordersList = document.getElementById('ordersList');
+            
+            if (orders.length > 0) {
+                ordersList.innerHTML = orders.map(order => `
+                    <div class="order-item">
+                        <div class="order-header">
+                            📋 Order #${order.id} - ${order.name}
+                            <span style="float: right; font-size: 0.85em; color: #6c757d;">${order.timestamp}</span>
+                        </div>
+                        <div class="order-details">
+                            <strong>Product:</strong> ${order.product} | 
+                            <strong>Quantity:</strong> ${order.quantity} | 
+                            <strong>Status:</strong> <span style="color: #fd7e14;">${order.status}</span>
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                ordersList.innerHTML = `
+                    <div class="no-orders">
+                        📝 No orders yet. Submit your first order using the form above!
+                    </div>
+                `;
+            }
+        }
+
+        // Add some interactivity to form fields
+        document.querySelectorAll('input, select').forEach(field => {
+            field.addEventListener('input', function() {
+                if (this.value) {
+                    this.style.borderColor = '#28a745';
+                } else {
+                    this.style.borderColor = '#e1e5e9';
+                }
+            });
+        });
+
+        // Load orders when page loads
+        loadOrders();
+
+        // Add a sample order for demo purposes if none exist
+        if (orders.length === 0) {
+            setTimeout(() => {
+                orders = [
+                    {
+                        id: 1,
+                        name: "Demo Customer",
+                        product: "MacBook Pro",
+                        quantity: 1,
+                        timestamp: new Date().toLocaleString(),
+                        status: "Completed"
+                    }
+                ];
+                localStorage.setItem('demoOrders', JSON.stringify(orders));
+                loadOrders();
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
